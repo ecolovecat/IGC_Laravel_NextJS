@@ -16,6 +16,11 @@
   }
 }
 
+.custom-primary-button {
+  background-color: blue;
+  color: white; /* You might need to adjust text color for readability */
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
