@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SignupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -19,10 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('jwt')->get('/check-jwt', function () {
-    return response()->json(['message' => 'JWT is working']);
-});
-
+Route::post('/signup', [SignupController::class, 'signup']);
 
 // Route::middleware('auth:api')->group(function () {
 //     Route::post('/login', [AuthController::class, 'login']);
