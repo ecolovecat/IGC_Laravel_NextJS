@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+    db:
+        image: mysql:8.0
+        container_name: dbigc
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: "040301"
+            MYSQL_DATABASE: "igc"
+        volumes:
+            - ./docker-compose/mysql:/docker-entrypoint-initdb.d:rw
+        ports:
+            - "3306:3306"
+        networks:
+            - hbm
+networks:
+    hbm:
+        driver: bridge
