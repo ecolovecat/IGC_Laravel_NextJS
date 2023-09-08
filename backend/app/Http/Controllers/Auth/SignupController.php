@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SignupRequest;
 use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 
@@ -15,14 +16,11 @@ class SignupController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function signup(Request $request) {
+    public function signup(SignupRequest $request) {
         try {
-            $request->validate([
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8',
-            ]);
 
             $user = $this->userRepository->create([
+                'name' => $request->input('name'),
                 'email' => $request->input('email'), // Corrected field name from 'name' to 'email'
                 'password' => bcrypt($request->input('password')),
             ]);
@@ -33,6 +31,9 @@ class SignupController extends Controller
             ], 201);
         } catch (\Throwable $e) {
             //throw $th;
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 422);
+            }
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
