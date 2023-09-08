@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import InputField from "../componnets/InputField";
 import PrimaryButton from "../componnets/PrimaryButton";
 import { useForm, Controller } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { Alert, Snackbar, TextField } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const SignupPage = () => {
   const {
@@ -12,14 +12,53 @@ const SignupPage = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const [lastPasswordValue, setLastPasswordValue] = useState("");
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const router = useRouter();
+  const [validateErrors, setValidateErrors] = useState<any>([]);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [messageSnackBar, setMessageSnackBar] = useState("");
+  const password = watch("password");
+  const onSubmit = async (data: any) => {
+    const { retypePassword, ...formData } = data;
+    try {
+      const response = await fetch("http://localhost:8000/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const res = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setValidateErrors(await res.errors);
+        } else {
+          throw new Error("Error signing up");
+        }
+      }
+      router.push("/login");
+      setOpenSnackBar(true);
+      setMessageSnackBar("SignUp Success");
+
+      console.log(456, res);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const handleCloseSnackBar = () => {
+    setOpenSnackBar(false);
+  };
+
+  React.useEffect(() => {
+    console.log(validateErrors);
+  }, [validateErrors]);
 
   return (
     <div className="bg-gray-100 h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
+        {/* {validateErrors.map} */}
         <h1 className="text-3xl font-semibold mb-4">Instagram</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
@@ -36,7 +75,9 @@ const SignupPage = () => {
                   margin="normal"
                   required
                 />
-                {/* {errors && <p className="text-red-500">{errors.message}</p>} */}
+                {validateErrors && validateErrors.name && (
+                  <p className="text-red-500">{validateErrors.name}</p>
+                )}
               </>
             )}
           />
@@ -55,9 +96,9 @@ const SignupPage = () => {
                   margin="normal"
                   required
                 />
-                {/* {errors.email && (
-                  <p className="text-red-500">{errors.email.message}</p>
-                )} */}
+                {validateErrors && validateErrors.email && (
+                  <p className="text-red-500">{validateErrors.email}</p>
+                )}
               </>
             )}
           />
@@ -65,23 +106,26 @@ const SignupPage = () => {
             name="password"
             control={control}
             render={({ field }) => (
-              <TextField
-                {...field}
-                type="password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                onChange={(e) => setLastPasswordValue(e.target.value)}
-              />
+              <>
+                <TextField
+                  {...field}
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                />
+                {validateErrors && validateErrors.password && (
+                  <p className="text-red-500">{validateErrors.password}</p>
+                )}
+              </>
             )}
           />
           <Controller
             name="retypePassword"
             control={control}
             rules={{
-              validate: (value) =>
-                value == lastPasswordValue || "Password missmatch",
+              validate: (value) => value == password || "Password missmatch",
             }}
             render={({ field }) => (
               <>
@@ -109,6 +153,15 @@ const SignupPage = () => {
           </a>
         </div>
       </div>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackBar}
+      >
+        <Alert onClose={handleCloseSnackBar} severity="success">
+          {messageSnackBar}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

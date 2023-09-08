@@ -30,10 +30,6 @@ class SignupController extends Controller
                 'data' => $user,
             ], 201);
         } catch (\Throwable $e) {
-            //throw $th;
-            if ($e instanceof \Illuminate\Validation\ValidationException) {
-                return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 422);
-            }
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
