@@ -51,14 +51,9 @@ const SignupPage = () => {
     setOpenSnackBar(false);
   };
 
-  React.useEffect(() => {
-    console.log(validateErrors);
-  }, [validateErrors]);
-
   return (
     <div className="bg-gray-100 h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        {/* {validateErrors.map} */}
         <h1 className="text-3xl font-semibold mb-4">Instagram</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
