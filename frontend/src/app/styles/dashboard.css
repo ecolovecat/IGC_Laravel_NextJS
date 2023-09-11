@@ -1,7 +1,9 @@
-.w133 {
-  width: 13.3%; /* 1/8 */
+.w-133 {
+  width: 13.3%;
+  position: fixed;
 }
 
 .w867 {
+  margin-left: 13.3%;
   width: 86.7%; /* 7/8 */
 }

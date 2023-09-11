@@ -16,7 +16,7 @@ interface SideBarProps {}
 
 const SideBar: React.FC<SideBarProps> = ({}) => {
   return (
-    <div className="w-133 px-[12px] py-[8px] h-screen grow flex-col border border-gray-300 bg-white min-w-0">
+    <div className="w-133 px-[12px]  fixed py-[8px] h-screen grow flex-col border border-gray-300 bg-white min-w-0">
       <div className="logo px-[12px] h-1/6 flex items-center max-h-[92px] min-h-[92px] justify-start">
         <Image src={Logo} alt="logo" width={103} height={29} />
       </div>
