@@ -23,9 +23,7 @@ export default function RootLayout({
         ) : (
           <div className="w-screen h-full min-h-screen flex">
             <SideBar />
-            <div className="w867 bg-white flex pt-[22px] items-center justify-center min-w-0">
-              {children}
-            </div>
+            <div className="w867 bg-white ">{children}</div>
           </div>
         )}
       </body>

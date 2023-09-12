@@ -3,7 +3,11 @@ import SideBar from "./componnets/layouts/SideBar";
 import Content from "./componnets/layouts/Content";
 
 const App = () => {
-  return <Content />;
+  return (
+    <div className="flex pt-[22px]  items-center justify-center min-w-0">
+      <Content />;
+    </div>
+  );
 };
 
 export default App;
